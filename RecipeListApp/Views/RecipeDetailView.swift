@@ -38,7 +38,7 @@ struct RecipeDetailView: View {
                         .font(.headline)
                         .padding([.top, .bottom],  5)
                     ForEach(0..<recipe.directions.count, id:\.self){ index in
-                        Text(String(index+1) + ". " + recipe.directions[index])
+                        Text(String(index+1) + ".  " + recipe.directions[index])
                             .padding(.bottom, 4)
                     }
                 }
