@@ -24,8 +24,8 @@ struct RecipeDetailView: View {
                         .padding(.vertical, 5.0)
                         
                     //display the ingredient for the current item
-                    ForEach(recipe.ingredients, id:\.self){ item in
-                        Text("•" + item)
+                    ForEach(recipe.ingredients){ item in
+                        Text("•" + item.name)
                             .padding(.bottom, 2)
                     }
                 }

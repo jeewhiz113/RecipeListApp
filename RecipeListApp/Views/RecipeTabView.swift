@@ -10,12 +10,12 @@ import SwiftUI
 struct RecipeTabView: View {
     var body: some View {
         TabView{
-            Text("Featured View")
+            Text("Featured View")  //Note the tabItem below is attached to this, this gets displayed initially regardless since it is the first tabItem
                 .tabItem{
                     Image(systemName: "star.fill")
                     Text("Featured")
                 }
-            RecipeListView()
+            RecipeListView()  //when the tab is hit, we switch to RecipeListView
                 .tabItem{
                     VStack{
                         Image(systemName: "list.bullet")

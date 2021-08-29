@@ -30,7 +30,6 @@ struct RecipeListView: View {
                     })
             }.navigationBarTitle("All Recipes")
         }
-        
     }
 }
 
