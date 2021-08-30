@@ -17,8 +17,49 @@ struct RecipeFeaturedView: View {
     
     //Since this is a subview of the tabview and in the tabview, the environment object modifier is defined:
     @EnvironmentObject var model: RecipeModel
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Featured Recipes")
+                .padding(.leading)
+                .padding(.top, 30)
+                .font(.largeTitle)
+            GeometryReader{ geo in
+                TabView{  //note tabView gets auto centered. and the Rectangle takes up the whole screen, so the frame is actually specifying the width and height of the tabview
+                    //go through all items in the recipes array and if featured has a true value then display the card.
+                    ForEach(0..<model.recipes.count){ index in
+                        if (model.recipes[index].featured){  //if featured is true
+                            ZStack{
+                                //ZStack cause I wanna add image and name on top of the rectangle, so the rectangle serves as a card
+                                Rectangle()
+                                    .foregroundColor(.white)
+                                VStack (spacing:0){
+                                    Image(model.recipes[index].image)
+                                        .resizable()
+                                        .aspectRatio(contentMode:.fill)
+                                        .clipped()
+                                    Text(model.recipes[index].name)
+                                        .padding(5)
+                                }
+                                    //.shadow(radius:1000)
+                            }.frame(width: geo.size.width-40, height: geo.size.height-100)  //Why is it centered?  The width parameter says we have 40 to play with on the sides together.
+                            .cornerRadius(20)  //the zstack has this much width and height to contain the rectangle and vstack
+                            .shadow(color:Color.black, radius:10, x:-5,y:5)
+                        }
+                    }
+                }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))  //this shows the little dots at the bottom showing how many to swipe through
+                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))  //makes the scroll dots more visible
+            }
+            VStack (alignment: .leading, spacing:10) {
+                Text("Preparation Time:")
+                    .font(.headline)
+                Text("1 Hour")
+                Text("Highlights")
+                    .font(.headline)
+                Text("Healthy, Hearty")
+            }.padding([.leading, .bottom])
+        }
     }
 }
 
