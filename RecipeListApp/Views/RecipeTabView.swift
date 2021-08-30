@@ -10,7 +10,8 @@ import SwiftUI
 struct RecipeTabView: View {
     var body: some View {
         TabView{
-            Text("Featured View")  //Note the tabItem below is attached to this, this gets displayed initially regardless since it is the first tabItem
+            //So to modify the featured view, we simply modofy the RecipeFeaturedView file
+            RecipeFeaturedView()  //Note the tabItem below is attached to this, this gets displayed initially regardless since it is the first tabItem
                 .tabItem{
                     Image(systemName: "star.fill")
                     Text("Featured")
@@ -23,6 +24,7 @@ struct RecipeTabView: View {
                     }
                 }
         }
+        .environmentObject(RecipeModel())
     }
 }
 
