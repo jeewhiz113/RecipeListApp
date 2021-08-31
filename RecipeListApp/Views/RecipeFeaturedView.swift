@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeFeaturedView: View {
-    
+    @State var detailShowing = false
     //note that if we were to do:
     //@ObservedObject var model = RecipeModel()
     
@@ -30,22 +30,32 @@ struct RecipeFeaturedView: View {
                     //go through all items in the recipes array and if featured has a true value then display the card.
                     ForEach(0..<model.recipes.count){ index in
                         if (model.recipes[index].featured){  //if featured is true
-                            ZStack{
-                                //ZStack cause I wanna add image and name on top of the rectangle, so the rectangle serves as a card
-                                Rectangle()
-                                    .foregroundColor(.white)
-                                VStack (spacing:0){
-                                    Image(model.recipes[index].image)
-                                        .resizable()
-                                        .aspectRatio(contentMode:.fill)
-                                        .clipped()
-                                    Text(model.recipes[index].name)
-                                        .padding(5)
-                                }
-                                    //.shadow(radius:1000)
-                            }.frame(width: geo.size.width-40, height: geo.size.height-100)  //Why is it centered?  The width parameter says we have 40 to play with on the sides together.
-                            .cornerRadius(20)  //the zstack has this much width and height to contain the rectangle and vstack
-                            .shadow(color:Color.black, radius:10, x:-5,y:5)
+                            Button(action: {
+                                //show the detail sheet
+                                self.detailShowing = true;
+                            }, label: {
+                                ZStack{
+                                    //ZStack cause I wanna add image and name on top of the rectangle, so the rectangle serves as a card
+                                    Rectangle()
+                                        .foregroundColor(.white)
+                                    VStack (spacing:0){
+                                        Image(model.recipes[index].image)
+                                            .resizable()
+                                            .aspectRatio(contentMode:.fill)
+                                            .clipped()
+                                        Text(model.recipes[index].name)
+                                            .padding(5)
+                                    }
+                                        //.shadow(radius:1000)
+                                }.frame(width: geo.size.width-40, height: geo.size.height-100)  //Why is it centered?  The width parameter says we have 40 to play with on the sides together.
+                                .cornerRadius(20)  //the zstack has this much width and height to contain the rectangle and vstack
+                                .shadow(color:Color.black, radius:10, x:-5,y:5)
+                            })
+                            .sheet(isPresented: $detailShowing){
+                                //show the recipe detail view if true, sheet is a property of the Button class
+                                RecipeDetailView(recipe: model.recipes[index])  //show this recipe
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                 }
