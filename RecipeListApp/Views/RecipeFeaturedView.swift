@@ -21,6 +21,7 @@ struct RecipeFeaturedView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Featured Recipes")
+                .bold()
                 .padding(.leading)
                 .padding(.top, 30)
                 .font(.largeTitle)
@@ -66,5 +67,6 @@ struct RecipeFeaturedView: View {
 struct RecipeFeaturedViews_Previews: PreviewProvider {
     static var previews: some View {
         RecipeFeaturedView()
+            .environmentObject(RecipeModel())
     }
 }
