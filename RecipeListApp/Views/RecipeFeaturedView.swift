@@ -17,16 +17,17 @@ struct RecipeFeaturedView: View {
     
     //Since this is a subview of the tabview and in the tabview, the environment object modifier is defined:
     @EnvironmentObject var model: RecipeModel
-    
+    @State var tabSelectionIndex = 0
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Featured Recipes")
                 .bold()
                 .padding(.leading)
                 .padding(.top, 30)
-                .font(.largeTitle)
+                .font(Font.custom("Avenir Heavy", size:24))
             GeometryReader{ geo in
-                TabView{  //note tabView gets auto centered. and the Rectangle takes up the whole screen, so the frame is actually specifying the width and height of the tabview
+                TabView(selection: $tabSelectionIndex){  //Note tabView changes tabselectionIndex
+                    //note tabView gets auto centered. and the Rectangle takes up the whole screen, so the frame is actually specifying the width and height of the tabview
                     //go through all items in the recipes array and if featured has a true value then display the card.
                     ForEach(0..<model.recipes.count){ index in
                         if (model.recipes[index].featured){  //if featured is true
@@ -45,12 +46,14 @@ struct RecipeFeaturedView: View {
                                             .clipped()
                                         Text(model.recipes[index].name)
                                             .padding(5)
+                                            .font(Font.custom("Avenir", size:15))
                                     }
                                         //.shadow(radius:1000)
                                 }.frame(width: geo.size.width-40, height: geo.size.height-100)  //Why is it centered?  The width parameter says we have 40 to play with on the sides together.
                                 .cornerRadius(20)  //the zstack has this much width and height to contain the rectangle and vstack
                                 .shadow(color:Color.black, radius:10, x:-5,y:5)
                             })
+                            .tag(index)  //this is to keep track of the curren recipe the user is looking at
                             .sheet(isPresented: $detailShowing){
                                 //show the recipe detail view if true, sheet is a property of the Button class
                                 RecipeDetailView(recipe: model.recipes[index])  //show this recipe
@@ -64,13 +67,29 @@ struct RecipeFeaturedView: View {
             }
             VStack (alignment: .leading, spacing:10) {
                 Text("Preparation Time:")
-                    .font(.headline)
-                Text("1 Hour")
+                    .font(Font.custom("Avenir Heavy", size:16))
+
+                Text(model.recipes[tabSelectionIndex].prepTime)
+                    .font(Font.custom("Avenir", size:15))
                 Text("Highlights")
-                    .font(.headline)
-                Text("Healthy, Hearty")
+                    .font(Font.custom("Avenir Heavy", size:16))
+                RecipeHighlights(highlights: model.recipes[tabSelectionIndex].highlights)
+
+                
             }.padding([.leading, .bottom])
         }
+        .onAppear(perform: {
+            setFeaturedIndex()
+        })
+    }
+    
+    func setFeaturedIndex(){  //??? What is going on here?
+        //find the index of the first recipe that is featured
+        var index = model.recipes.firstIndex{
+            (recipe) -> Bool in
+            return recipe.featured
+        }
+        tabSelectionIndex = index ?? 0
     }
 }
 
